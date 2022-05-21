@@ -7,13 +7,15 @@ NAME	=	minishell
 LIBFT	=	libft/libft.a
 
 SRCS	=	minishell.c \
+			parsing/parsing.c \
+			parsing/error_handling.c \
 
 OBJS	=	$(SRCS:.c=.o)
 
 all:	$(NAME)
 
-$(NAME):	$(LIBFT) $(NAME)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT)
+$(NAME):	$(LIBFT) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline
 
 $(LIBFT):
 	make -C libft
