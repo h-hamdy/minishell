@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 09:23:59 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/22 10:11:18 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/22 17:12:52 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-typedef	struct	s_node
+typedef struct s_node
 {
+	char		**full_cmd;
 	char		*cmd;
 	char		*arguments;
 	char		*infile;
@@ -35,15 +36,18 @@ typedef	struct	s_node
 	char		*limiter;
 }				t_node;
 
-typedef struct	s_data
+typedef struct s_data
 {
 	t_node	*node;
 	char	**path;
+	int		pipe_num;
 	pid_t	pid;
 }				t_data;
 
-/******************PARCING_PART*****************/
+/******************PARCING_PART__1*****************/
 void	parcing_function(void);
-/*-----------------------------------------------*/
+void	error_handling(char *line);
+void	error_msg(char *s);
+/*-----------------PARCING_PART_2--------------*/
 
 #endif

@@ -9,6 +9,7 @@ LIBFT	=	libft/libft.a
 SRCS	=	minishell.c \
 			parsing/parsing.c \
 			parsing/error_handling.c \
+			parsing/utils.c \
 
 OBJS	=	$(SRCS:.c=.o)
 
