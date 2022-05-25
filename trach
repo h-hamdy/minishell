@@ -1,0 +1,61 @@
+// / this function count how many redirection in the line
+// int		count_fun(char *line)
+// {
+// 	int i;
+// 	int	count;
+
+// 	i = 0;
+// 	count = 0;
+// 	while (line[i])
+// 	{
+// 		i = skip_char_inside_quote(line, i);
+// 		if (line[i] == '<' || line[i] == '|' || line[i] == '>')
+// 		{
+// 			if (line[i + 1] != '<' && line[i + 1] != '|' && line[i + 1] != '>')
+// 				count++;
+// 		}
+// 		i++;
+// 	}
+// 	return (count);
+// }
+
+
+
+// char *add_space(char *s)
+// {
+// 	char	*s_line;
+// 	int		i;
+// 	int		count;
+// 	int		j;
+
+// 	i = 0;
+// 	j = 0;
+// 	count = count_fun(s);
+// 	s_line = (char *)malloc(sizeof(char) * ft_strlen(s) + (count * 2) + 1);
+// 	if (!s_line)
+// 		return (NULL);
+// 	while (s[i])
+// 	{
+// 		if (s[i] == '<' || s[i] == '|' || s[i] == '>')
+// 		{
+// 			s_line[j] = ' ';
+// 			// if (s[i + 1] != '<' || s[i + 1] != '|' || s[i + 1] != '>')
+// 			// {
+// 			// 	s_line[j] = ' ';
+// 			// 	j++;
+// 			// 	s_line[j] = s[i];
+// 			// 	j++;
+// 			// 	s_line[j] = ' ';
+// 			// }
+// 			// else
+// 			// s_line[j] = s[i];	
+// 		}
+// 		else
+// 			s_line[j] = s[i];
+// 		j++;
+// 		i++;
+// 	}
+// 	s_line[j] = '\0';
+// 	printf("%s\n", s_line);
+// 	return (s_line);
+// }

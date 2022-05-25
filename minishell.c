@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 09:23:57 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/21 12:59:42 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/24 16:16:57 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int ac, char **av, char **envp)
 {
 	(void)ac;
-	(void)av;
-	(void)envp;
+	if (!av || !envp)
+		return (0);
 	parcing_function();
 }
