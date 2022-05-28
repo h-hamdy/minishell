@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 09:23:59 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/25 19:33:16 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/26 19:15:38 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@
 # include "libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-
-# define GETEXIT 0
-# define POSTEXIT 1
 
 # define RED_I "<"
 # define RED_O ">"
@@ -67,11 +64,15 @@ typedef struct s_data
 /******************PARCING_PART__1*****************/
 void	parcing_function(void);
 void	error_handling(char *line);
+
 void	error_msg(char *s);
+int		ignore_space(char *line, int i);
 char	*skip_space(char *s);
 char	*add_space(char *s);
-// int     exit_code_handler(int mod, int value);
-int	check_pipe_error(char *line);
+
+int		check_pipe_error(char *line);
+int		redirection_error(char **s_line);
+int		skip_char_inside_quote(char *line, int i, int flag);
 /*-----------------PARCING_PART_2--------------*/
 
 #endif

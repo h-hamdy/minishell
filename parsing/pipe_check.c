@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   pipe_check.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 17:09:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/25 19:45:10 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/26 21:43:14 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,12 @@
 
 void	error_msg(char *msg)
 {
-	write(2, msg, ft_strlen(msg));
+	char *str;
+
+	str = ft_strjoin("Minishell: syntax error near unexpected token ", msg);
+	write(2, str, ft_strlen(str));
+	write(2, "\n", 1);
+	free(str);
 }
 
 char	*skip_space(char *s)
@@ -92,7 +97,7 @@ int	check_pipe_error(char *line)
 			i = ignore_space(line, i + 1);
 			if (line[i] == '|')
 			{
-				error_msg("Minishell: syntax error near unexpected token `||'\n");
+				error_msg("`||'");
 				return (0);
 			}
 			if (line[i + 1] != '|')

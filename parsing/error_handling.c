@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/25 19:39:21 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/28 18:52:49 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,31 +49,29 @@ int	double_quote(char *line)
 	}
 	if (d_quote % 2 != 0 || s_quote % 2 != 0)
 	{
-		error_msg("Minishell: double quotes error\n");
+		write(2, "Minishell: double quotes error\n", 32);
 		return (0);
 	}
 	return (1);
 }
 
 // This function the first and the last of the line
-// And if there is only a redirection in the line
-int	ft_check1(char *line)
+int	pre_check(char *line)
 {
 	char *s_line;
 	
 	s_line = skip_space(line);
-	if (s_line[0] == '|')
+	if (s_line[0] == '|' && s_line[1] != '|')
 	{
-		error_msg("Minishell: syntax error near unexpected token `|'\n");
+		error_msg("`|'");
 		return (0);
 	}
-	if (s_line[ft_strlen(s_line) - 1] == '|'
-		|| s_line[ft_strlen(s_line) - 1] == '<'
-		|| s_line[ft_strlen(s_line) - 1] == '>')
+	else if (s_line[ft_strlen(s_line) - 1] == '|')
 	{
-			error_msg("Minishell: syntax error near unexpected token `newline'\n");
+			error_msg("`newline'");
 			return (0);
 	}
+	free(s_line);
 	return (1);
 }
 
@@ -81,17 +79,20 @@ void	redirections(char *line)
 {
 	char **s_line;
 	
-	if (!ft_check1(line))
+	if (!pre_check(line))
 		return ;
 	if (!check_pipe_error(line))
 		return ;
 	s_line = ft_split(line, '|');
+	redirection_error(s_line);
+	puts("__________splited____________\n");
 	int i = 0;
 	while (s_line[i])
 	{
 		printf("%s\n", s_line[i]);
 		i++;
 	}
+	puts("__________splited____________\n");
 }
 
 void	error_handling(char *line)
