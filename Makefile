@@ -11,6 +11,7 @@ SRCS	=	minishell.c \
 			parsing/error_handling.c \
 			parsing/pipe_check.c \
 			parsing/redirection_check.c \
+			parsing/utils.c
 
 OBJS	=	$(SRCS:.c=.o)
 
@@ -30,7 +31,6 @@ fclean:	clean
 	rm -rf libft/libft.a
 	rm -rf $(NAME)
 
-re:
-	fclean all
+re: fclean all
 
 .PHONY:	all clean fclean re

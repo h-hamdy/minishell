@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/28 18:52:49 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/29 17:00:36 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,16 @@ int	double_quote(char *line)
 			check_quote(&s_quote, &lock);
 		}
 	}
-	if (d_quote % 2 != 0 || s_quote % 2 != 0)
-	{
-		write(2, "Minishell: double quotes error\n", 32);
+	if (!trow_err(d_quote, s_quote))
 		return (0);
-	}
 	return (1);
 }
 
 // This function the first and the last of the line
 int	pre_check(char *line)
 {
-	char *s_line;
-	
+	char	*s_line;
+
 	s_line = skip_space(line);
 	if (s_line[0] == '|' && s_line[1] != '|')
 	{
@@ -68,8 +65,8 @@ int	pre_check(char *line)
 	}
 	else if (s_line[ft_strlen(s_line) - 1] == '|')
 	{
-			error_msg("`newline'");
-			return (0);
+		error_msg("`newline'");
+		return (0);
 	}
 	free(s_line);
 	return (1);
@@ -77,22 +74,14 @@ int	pre_check(char *line)
 
 void	redirections(char *line)
 {
-	char **s_line;
-	
+	char	**s_line;
+
 	if (!pre_check(line))
 		return ;
 	if (!check_pipe_error(line))
 		return ;
 	s_line = ft_split(line, '|');
 	redirection_error(s_line);
-	puts("__________splited____________\n");
-	int i = 0;
-	while (s_line[i])
-	{
-		printf("%s\n", s_line[i]);
-		i++;
-	}
-	puts("__________splited____________\n");
 }
 
 void	error_handling(char *line)

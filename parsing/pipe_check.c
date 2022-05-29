@@ -6,21 +6,11 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 17:09:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/26 21:43:14 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/05/29 16:45:20 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	error_msg(char *msg)
-{
-	char *str;
-
-	str = ft_strjoin("Minishell: syntax error near unexpected token ", msg);
-	write(2, str, ft_strlen(str));
-	write(2, "\n", 1);
-	free(str);
-}
 
 char	*skip_space(char *s)
 {
@@ -43,47 +33,46 @@ char	*skip_space(char *s)
 	return (s_line);
 }
 
+void	skip_d_quote(char *line, int i, int flag)
+{
+	i++;
+	while (line[i] && line[i] != '"')
+	{
+		if (flag == 0)
+		{
+			if (line[i] == '|')
+				line[i] = -1;
+		}
+		i++;
+	}
+}
+
+void	skip_s_quote(char *line, int i, int flag)
+{
+	i++;
+	while (line[i] && line[i] != '\'')
+	{
+		if (flag == 0)
+		{
+			if (line[i] == '|')
+				line[i] = -1;
+		}
+		i++;
+	}
+}
+
 int	skip_char_inside_quote(char *line, int i, int flag)
 {
 	if (line[i] == '"')
-	{
-		i++;
-		while (line[i] && line[i] != '"')
-		{
-			if (flag == 0)
-			{
-				if (line[i] == '|')
-					line[i] = -1;
-			}
-			i++;
-		}
-	}
+		skip_d_quote(line, i, flag);
 	else if (line[i] == '\'')
-	{
-		i++;
-		while (line[i] && line[i] != '\'')
-		{
-			if (flag == 0)
-			{
-				if (line[i] == '|')
-					line[i] = -1;
-			}
-			i++;
-		}
-	}
-	return (i);
-}
-
-int	ignore_space(char *line, int i)
-{
-	while (line[i] == ' ')
-		i++;
+		skip_s_quote(line, i, flag);
 	return (i);
 }
 
 int	check_pipe_error(char *line)
 {
-	int i;
+	int	i;
 	int	count;
 
 	count = 0;
