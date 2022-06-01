@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	parcing_function(void)
+void	parcing_function(char **env)
 {
 	char	*line;
 
@@ -21,5 +21,6 @@ void	parcing_function(void)
 		line = readline("\033[0;36mMinishell$ \033[0;37m");
 		add_history(line);
 		error_handling(line);
+		handel_echo(line, env);
 	}
 }

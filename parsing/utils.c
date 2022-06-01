@@ -38,3 +38,28 @@ int	trow_err(int d_quote, int s_quote)
 	}
 	return (1);
 }
+
+char	*fo_strjoin(char *str, char c)
+{
+	char	*r;
+	int		i;
+
+	i = 0;
+	if (!str)
+		return (NULL);
+	while (str[i])
+		i++;
+	r = malloc(sizeof(char) * i + 2);
+	if (!r)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		r[i] = str[i];
+		i++;
+	}
+	r[i] = c;
+	r[i + 1] = '\0';
+	free(str);
+	return (r);
+}

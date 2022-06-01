@@ -44,9 +44,28 @@ typedef struct s_data
 	pid_t	pid;
 }				t_data;
 
+typedef struct s_tokens
+{
+	char	*value;
+	enum 
+	{
+		WORD,
+		RDRI,
+		RDRO,
+		HERDOC,
+		APPEND,
+		PIPE
+	} e_type;
+}	t_tokens;
+
 /********************PARCING_PART__1********************/
-void	parcing_function(void);
+void	parcing_function(char **env);
 void	error_handling(char *line);
+void    handel_echo(char *line, char **env);
+void    *after_split(char *s_line);
+int 	ft_count(char *token);
+char	*handel_many_red(char *token);
+void    *check_tokens(char *token, char *value);
 
 /*********************UTILS****************************/
 void	error_msg(char *s);
@@ -55,6 +74,7 @@ char	*skip_space(char *s);
 char	*add_space(char *s);
 int		trow_err(int d_quote, int s_quote);
 int		skip_char_inside_quote(char *line, int i, int flag);
+char	*fo_strjoin(char *str, char c);
 
 /********************CHECK_TOKENS***********************/
 int		check_pipe_error(char *line);

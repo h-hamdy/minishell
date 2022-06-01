@@ -81,7 +81,15 @@ void	redirections(char *line)
 	if (!check_pipe_error(line))
 		return ;
 	s_line = ft_split(line, '|');
+	// if (!s_line)
+	// 	printf("%s\n", line);
 	redirection_error(s_line);
+	int i = 0;
+	while (s_line[i])
+	{
+		after_split(s_line[i]);
+		i++;
+	}
 }
 
 void	error_handling(char *line)

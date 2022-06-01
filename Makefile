@@ -11,7 +11,9 @@ SRCS	=	minishell.c \
 			parsing/error_handling.c \
 			parsing/pipe_check.c \
 			parsing/redirection_check.c \
-			parsing/utils.c
+			parsing/utils.c \
+			parsing/more_parsing.c \
+			parsing/get_tokens.c
 
 OBJS	=	$(SRCS:.c=.o)
 

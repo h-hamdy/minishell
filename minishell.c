@@ -17,5 +17,6 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	if (!av || !envp)
 		return (0);
-	parcing_function();
+	parcing_function(envp);
+	
 }
