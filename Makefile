@@ -12,7 +12,7 @@ SRCS	=	minishell.c \
 			parsing/pipe_check.c \
 			parsing/redirection_check.c \
 			parsing/utils.c \
-			parsing/more_parsing.c \
+			parsing/dollar_handling.c \
 			parsing/get_tokens.c
 
 OBJS	=	$(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/29 17:00:36 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/02 10:22:59 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,7 @@ void	redirections(char *line)
 	if (!check_pipe_error(line))
 		return ;
 	s_line = ft_split(line, '|');
-	// if (!s_line)
-	// 	printf("%s\n", line);
 	redirection_error(s_line);
-	int i = 0;
-	while (s_line[i])
-	{
-		after_split(s_line[i]);
-		i++;
-	}
 }
 
 void	error_handling(char *line)
