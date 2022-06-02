@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/02 10:22:59 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/02 10:30:59 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,21 +72,25 @@ int	pre_check(char *line)
 	return (1);
 }
 
-void	redirections(char *line)
+int	redirections(char *line)
 {
 	char	**s_line;
 
 	if (!pre_check(line))
-		return ;
+		return (0);
 	if (!check_pipe_error(line))
-		return ;
+		return (0);
 	s_line = ft_split(line, '|');
-	redirection_error(s_line);
+	if (!redirection_error(s_line))
+		return (0);
+	return (1);
 }
 
-void	error_handling(char *line)
+void	error_handling(char *line, char **env)
 {
 	if (!double_quote(line))
 		return ;
-	redirections(line);
+	if (!redirections(line))
+		return ;
+	handel_echo(line, env);
 }

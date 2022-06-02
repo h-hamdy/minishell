@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 09:23:59 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/29 17:08:48 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/02 10:28:06 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ typedef struct s_tokens
 
 /********************PARCING_PART__1********************/
 void	parcing_function(char **env);
-void	error_handling(char *line);
+void	error_handling(char *line, char **env);
 void    handel_echo(char *line, char **env);
 void    *after_split(char *s_line);
 int 	ft_count(char *token);
