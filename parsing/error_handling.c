@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/02 10:30:59 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/22 02:48:51 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ int	pre_check(char *line)
 	char	*s_line;
 
 	s_line = skip_space(line);
+	if (!s_line[0])
+		return (0);
 	if (s_line[0] == '|' && s_line[1] != '|')
 	{
 		error_msg("`|'");
@@ -72,25 +74,61 @@ int	pre_check(char *line)
 	return (1);
 }
 
-int	redirections(char *line)
+char	**redirections(char *line)
 {
 	char	**s_line;
 
+	s_line = NULL;
 	if (!pre_check(line))
-		return (0);
+		return (NULL);
 	if (!check_pipe_error(line))
-		return (0);
+		return (NULL);
 	s_line = ft_split(line, '|');
-	if (!redirection_error(s_line))
-		return (0);
-	return (1);
+	if (!redirection_error(s_line)) 
+		return (NULL);
+	return (s_line);
 }
 
 void	error_handling(char *line, char **env)
 {
+	char	**s_line;
+	t_list	*pipeline;
+
+	s_line = NULL;
 	if (!double_quote(line))
 		return ;
-	if (!redirections(line))
+	s_line = redirections(line);
+	if (!s_line)
 		return ;
 	handel_echo(line, env);
+	pipeline = get_full_cmd(s_line);
+	if (!pipeline)
+		return ;
+	int i = 0;
+	while (pipeline)
+	{
+		if (((t_cmd*)pipeline->content)->limiter)
+		{
+			i = 0;
+			while (((t_cmd*)pipeline->content)->limiter[i])
+			{
+				printf("limiter = %s\n", ((t_cmd*)pipeline->content)->limiter[i]);
+				i++;
+			}
+		}
+		if (((t_cmd*)pipeline->content)->red)
+		{
+			i = 0;
+			while (((t_cmd*)pipeline->content)->red[i])
+			{
+				printf("red = %s and type = %d\n", ((t_cmd*)pipeline->content)->red[i], ((t_cmd*)pipeline->content)->type[i]);
+				i++;
+			}
+		}
+		if (((t_cmd*)pipeline->content)->cmd)
+			printf("cmd = %s\n", ((t_cmd*)pipeline->content)->cmd);
+		pipeline = pipeline->next;
+		printf("------------------------------------\n");
+	}
+	d_free(s_line);
 }

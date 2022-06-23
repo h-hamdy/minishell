@@ -1,6 +1,6 @@
 CC		=	gcc
 
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	-Wall -Wextra -Werror -g #-fsanitize=address
 
 NAME	=	minishell
 
@@ -13,7 +13,9 @@ SRCS	=	minishell.c \
 			parsing/redirection_check.c \
 			parsing/utils.c \
 			parsing/dollar_handling.c \
-			parsing/get_tokens.c
+			parsing/get_tokens.c \
+			parsing/utils1.c \
+			parsing/get_full_cmd.c \
 
 OBJS	=	$(SRCS:.c=.o)
 
@@ -24,6 +26,7 @@ $(NAME):	$(LIBFT) $(OBJS)
 
 $(LIBFT):
 	make -C libft
+	make bonus -C libft
 
 clean:
 	make clean -C libft
@@ -35,4 +38,4 @@ fclean:	clean
 
 re: fclean all
 
-.PHONY:	all clean fclean re
+.PHONY:	all clean fclean re§

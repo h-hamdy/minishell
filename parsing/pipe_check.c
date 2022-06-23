@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 17:09:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/29 16:45:20 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/04 10:36:46 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*skip_space(char *s)
 	return (s_line);
 }
 
-void	skip_d_quote(char *line, int i, int flag)
+int	skip_d_quote(char *line, int i, int flag)
 {
 	i++;
 	while (line[i] && line[i] != '"')
@@ -45,9 +45,10 @@ void	skip_d_quote(char *line, int i, int flag)
 		}
 		i++;
 	}
+	return (i);
 }
 
-void	skip_s_quote(char *line, int i, int flag)
+int	skip_s_quote(char *line, int i, int flag)
 {
 	i++;
 	while (line[i] && line[i] != '\'')
@@ -59,14 +60,15 @@ void	skip_s_quote(char *line, int i, int flag)
 		}
 		i++;
 	}
+	return (i);
 }
 
 int	skip_char_inside_quote(char *line, int i, int flag)
 {
 	if (line[i] == '"')
-		skip_d_quote(line, i, flag);
+		i = skip_d_quote(line, i, flag);
 	else if (line[i] == '\'')
-		skip_s_quote(line, i, flag);
+		i = skip_s_quote(line, i, flag);
 	return (i);
 }
 

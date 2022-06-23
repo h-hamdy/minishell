@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 16:40:21 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/29 17:00:04 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/23 22:41:20 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	error_msg(char *msg)
 
 int	ignore_space(char *line, int i)
 {
-	while (line[i] == ' ')
+	while (line[i] && line[i] == ' ')
 		i++;
 	return (i);
 }
@@ -37,6 +37,33 @@ int	trow_err(int d_quote, int s_quote)
 		return (0);
 	}
 	return (1);
+}
+
+char	**ft_free(char **str, int k)
+{
+	while (k >= 0)
+	{
+		free(str[k]);
+		k--;
+	}
+	return (str);
+}
+
+void	d_free(char **str)
+{
+	int i;
+
+	i = 0;
+	if (!str)
+		return ;
+	while (str[i])
+	{
+		free(str[i]);
+		str[i] = 0;
+		i++;
+	}
+	free(str);
+	str = NULL;
 }
 
 char	*fo_strjoin(char *str, char c)
@@ -62,4 +89,39 @@ char	*fo_strjoin(char *str, char c)
 	r[i + 1] = '\0';
 	free(str);
 	return (r);
+}
+
+int	ft_count_word(char *line, int index)
+{
+	int count;
+
+	count = 0;
+	while (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
+	{
+		if (line[index] == '"' || line[index] == '\'')
+		{
+			if (line[index] == '"')
+			{
+				index++;
+				while (line[index] && line[index] != '"')
+				{
+					count++;
+					index++;
+				}
+			}
+			else
+			{
+				index++;
+				while (line[index] && line[index] != '\'')
+				{
+					count++;
+					index++;
+				}
+			}
+			return (count);
+		}
+		index++;
+		count++;
+	}
+	return (count);
 }

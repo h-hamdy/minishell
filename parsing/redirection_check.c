@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 14:01:33 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/05/29 17:05:34 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/22 04:47:27 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	last_char(char **line, int i)
 			error_msg("`|'");
 			return (0);
 		}
+		free(s_line);
 	}
 	return (1);
 }
@@ -81,15 +82,14 @@ int	redirection_error(char **s_line)
 	int	j;
 
 	i = 0;
-	if (!last_char(s_line, i))
+	if (!last_char(s_line, i)) 
 		return (0);
 	while (s_line[i])
 	{
-		j = 0;
+		j = ignore_space(s_line[i], j);
 		while (s_line[i][j])
 		{
-			j = ignore_space(s_line[i], j);
-			j = skip_char_inside_quote(*s_line, j, 1);
+			j = skip_char_inside_quote(s_line[i], j, 1);
 			if (!check_redirection(s_line, i, j))
 				return (0);
 			j++;
