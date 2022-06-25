@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_herdoc.c                                       :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:06:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/23 23:09:34 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/25 07:38:39 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,42 +103,73 @@ int count_args(char *line)
 	index = 0;
 	while (line[index])
 	{
-		if (line[index] == '"' || line[index] == '\'')
-			index = skip_char_inside_quote(line, index, 1);
+		// if (line[index] == '"' || line[index] == '\'')
+		// 	index = skip_char_inside_quote(line, index, 1);
 		index = ignore_space(line, index);
 		 if (line[index] == '<' || line[index] == '>')
 			index = skip_redirecition(line, index);
 		index = ignore_space(line, index);
-		if (line[index] != '<' || line[index] != '>')
+		if (line[index] && (line[index] != '<' || line[index] != '>'))
 		{
+			if (line[index] == '"' || line[index] == '\'')
+				index++;
 			count++;
-			while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ')
+			while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"' && line[index] != '\'')
 				index++;
 		}
+		else
+			index++;
 	}
 	return (count - 1);
 }
 
-int	 skip_redirecition(char *line, int index)
+int	  skip_redirecition(char *line, int index)
 {
 	index++;
 	if (line[index] == '<' || line[index] == '>')
 		index++;
 	index = ignore_space(line, index);
-	while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ')
+	if (line[index] == '"' || line[index] == '\'')
+	{
+		if (line[index] == '"')
+		{
+			index++;
+			while (line[index] && line[index] != '"')
+				index++;
+			return (index + 1);
+		}
+		else
+		{
+			index++;
+			while (line[index] && line[index] != '\'')
+				index++;
+			return (index + 1);
+		}
+	}
+	while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"' && line[index] != '\'')
 		index++;
 	return (index);
 }
 
-int	skip_word(char *line, int *index)
+int	skip_word(char *line, int index, int flag)
 {
-	int count;
-	
-	count = 0;
-	while (line[*index] && line[*index] != '<' && line[*index] != '>' && line[*index] != ' ')
+	if (flag == 1)
 	{
-		count++;
-		*index = *index + 1;
+		if (line[index] == '"')
+		{
+			index++;
+			while (line[index] && line[index] != '"')
+				index++;
+		}
+		else
+		{
+			index++;
+			while (line[index] && line[index] != '\'')
+				index++;
+		}
+		return (index);
 	}
-	return (count);
+	while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"')
+		index++;
+	return (index);
 }

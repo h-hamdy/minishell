@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 20:34:46 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/23 23:57:28 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/25 11:55:34 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	alloc_and_fill_cmd(char *line, t_cmd *data, int count_cmd)
 	}
 	else if (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
 	{
-		while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ')
+		while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' '
+			&& line[index] != '"' && line[index] != '\'')
 		{
 			data->cmd[row] = line[index];
 			row++;
@@ -65,83 +66,105 @@ void	alloc_and_fill_cmd(char *line, t_cmd *data, int count_cmd)
 	data->cmd[row] = '\0';
 }
 
-// void	allocate_arg(char *line, t_cmd *data, int count_arg)
-// {
-// 	int index;
-// 	int token;
-// 	int count;
-// 	int flag;
+void	allocate_arg(char *line, t_cmd *data, int count_arg)
+{
+	int index;
+	int token;
+	int count;
+	int flag;
+	int sign;
 
-// 	index = 0;
-// 	token = 0;
-// 	flag = 0;
-// 	data->arg = (char **)malloc(sizeof(char) * count_arg + 1);
-// 	while (line[index])
-// 	{
-// 		index = ignore_space(line, index);
-// 		if (line[index] == '<' || line[index] == '>')
-// 			index = skip_redirecition(line, index);
-// 		index = ignore_space(line, index);
-// 		if (line[index] != '<' || line[index] != '>')
-// 		{
-// 			if (flag == 1)
-// 			{
-// 				count = skip_word(line, &index);
-// 				data->arg[token] = (char *)malloc(sizeof(char) * count + 1);
-// 				token++;
-// 				index--;
-// 			}
-// 			else
-// 			{
-// 				flag = 1;
-// 				skip_word(line, &index);
-// 			}
-// 		}
-// 	}
-// 	data->arg[token] = NULL;
-// }
+	index = 0;
+	token = 0;
+	flag = 0;
+	sign = 0;
+	data->arg = (char **)malloc(sizeof(char) * count_arg + 1);
+	while (line[index])
+	{
+		index = ignore_space(line, index);
+		if (line[index] == '<' || line[index] == '>')
+			index = skip_redirecition(line, index);
+		index = ignore_space(line, index);
+			if (flag == 0)
+			{
+				(index = skip_word(line, index, 0), flag = 1);
+				index = ignore_space(line, index);
+			}
+			else if (flag == 1)
+			{
+				index = ignore_space(line, index);
+				count = ft_count_word(line, index);
+				data->arg[token] = (char *)malloc(sizeof(char) * count + 1);
+				token++;
+				if (line[index] == '"' || line[index] == '\'')
+					(index++, sign = 1);
+				index = skip_word(line, index, sign);
+				// printf("%d, %c, %d\n", index, line[index], count);
+				// exit (1);
+				// index--;
+			}
+			index++;
+	}
+	data->arg[token] = NULL;
+}
 
-// void	fill_arg(char *line, t_cmd *data)
-// {
-// 	int index;
-// 	int col;
-// 	int row;
-// 	int flag;
+void	fill_arg(char *line, t_cmd *data)
+{
+	int index;
+	int col;
+	int row;
+	int flag;
 
-// 	index = 0;
-// 	col = 0;
-// 	flag = 0;
-// 	while (line[index])
-// 	{
-// 		row = 0;
-// 		index = ignore_space(line, index);
-// 		if (line[index] == '<' || line[index] == '>')
-// 			index = skip_redirecition(line, index);
-// 		index = ignore_space(line, index);
-// 		if (line[index] != '<' || line[index] != '>')
-// 		{
-// 			if (flag == 1)
-// 			{
-				
-// 			}
-// 			else
-// 			{
-// 				flag = 1;
-// 				skip_word(line, &index);
-// 			}
-// 		}
-// 	}
-// 	data->arg[col] = NULL;
-// }
+	index = 0;
+	col = 0;
+	flag = 0;
+	while (line[index])
+	{
+		row = 0;
+		index = ignore_space(line, index);
+		if (line[index] == '<' || line[index] == '>')
+			index = skip_redirecition(line, index);
+		index = ignore_space(line, index);
+			if (flag == 0)
+			{
+				if (line[index] == '"' || line[index] == '\'')
+					index++;
+				(index = skip_word(line, index, 0), flag = 1);
+				if (line[index] == '"' || line[index] == '\'')
+					index++;
+				index = ignore_space(line, index);
+			}
+			else if (flag == 1)
+			{
+				index = ignore_space(line, index);
+				if (line[index] == '"' || line[index] == '\'')
+					index++;
+				while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' '
+					&& line[index] != '"' && line[index] != '\'')
+				{
+					data->arg[col][row] = line[index];
+					index++;
+					row++;
+				}
+				data->arg[col][row] = '\0';
+				col++;
+				if (line[index] == '"' || line[index] == '\'')
+					index++;
+			}
+	}
+	data->arg[col] = NULL;
+}
 
 void	allocate_her(char *line, t_cmd *data, int count_her)
 {
 	int	index;
 	int count;
 	int token;
+	int flag;
 
 	index = 0;
 	token = 0;
+	flag = 0;
 	data->limiter = (char **)malloc(sizeof(char *) * (count_her + 1));
 	while (line[index])
 	{
@@ -149,11 +172,14 @@ void	allocate_her(char *line, t_cmd *data, int count_her)
 		{
 			index += 2;
 			index = ignore_space(line, index);
+			if (line[index] == '"' || line[index] == '\'')
+				flag = 1;
 			count = ft_count_word(line, index);
 			data->limiter[token] = (char *)malloc(sizeof(char) * count + 1);
 			if (!data->limiter[token])
 				return ((void)ft_free(data->limiter, token - 1));
 			token++;
+			index = skip_word(line, index, flag);
 		}
 		else
 			index++;
@@ -164,6 +190,7 @@ void	allocate_her(char *line, t_cmd *data, int count_her)
 void	allocate_red(char *line, t_cmd *data, int count_red)
 {
 	int	index;
+	int	c_type;
 	int count;
 	int	token;
 	int	flag;
@@ -171,16 +198,26 @@ void	allocate_red(char *line, t_cmd *data, int count_red)
 	index = 0;
 	token = 0;
 	flag = 0;
+	c_type = 0;
 	data->red = (char **)malloc(sizeof(char *) * (count_red + 1));
 	data->type = (int *)malloc(sizeof(int) * (count_red + 1));
 	while (line[index])
 	{
+		flag = 0;
 		if (line[index] == '<' && line[index + 1] == '<')
+		{
 			index += 2;
+			index = ignore_space(line, index);
+			if (line[index] == '"' || line[index] == '\'')
+				index = skip_word(line, index, 1);
+			else
+				index = skip_word(line, index, 0);
+		}
 		if ((line[index] == '>' && line[index + 1] == '>')
 			|| (line[index] == '>' || line[index] == '<'))
 		{
-			data->type[flag] = check_red_type(line, index);
+			data->type[c_type] = check_red_type(line, index);
+			c_type++;
 			index++;
 			if (line[index] == '>')
 				index++;
@@ -190,7 +227,9 @@ void	allocate_red(char *line, t_cmd *data, int count_red)
 			if (!data->red[token])
 				return ((void)ft_free(data->red, token - 1));
 			token++;
-			flag++;
+			if (line[index] == '"' || line[index] == '\'')
+				flag = 1;
+			index = skip_word(line, index, flag);
 		}
 		else
 			index++;
@@ -238,7 +277,7 @@ void	fill_her(char *line, t_cmd *data)
 			}
 			else if (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
 			{
-				while (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
+				while (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>' && line[index] != '"' && line[index] != '\'')
 				{
 					data->limiter[col][row] = line[index];
 					index++;
@@ -298,7 +337,7 @@ void	fill_red(char *line, t_cmd *data)
 			}
 			else if (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
 			{
-				while (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
+				while (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>' && line[index] != '"' && line[index] != '\'')
 				{
 					data->red[col][row] = line[index];
 					index++;
@@ -320,23 +359,23 @@ int	get_items(char *line, t_cmd *data)
 	int count_red;
 	int	count_her;
 	int	count_cmd;
-	// int	count_arg;
+	int	count_arg;
+	(void)data;
 
 	count_red = count_redirection(line);
 	count_her = count_herdoc(line);
 	count_cmd = check_cmd(line, 0);
-	// count_arg = count_args(line);
-	if (!count_red && !count_her && !count_cmd)
+	count_arg = count_args(line);
+	if (!count_her && !count_cmd && !count_red)
 		return (0);
 	if (count_cmd)
 	{
 		alloc_and_fill_cmd(line, data, count_cmd);
-		// if (count_arg)
-		// {
-		// 	allocate_arg(line, data, count_arg);
-		// 	fill_arg(line, data);
-		// 	exit(1);
-		// }
+		if (count_arg)
+		{
+			allocate_arg(line, data, count_arg);
+			fill_arg(line, data);
+		}
 	}
 	if (count_red)
 	{

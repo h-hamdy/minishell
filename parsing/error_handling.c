@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/22 02:48:51 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/25 10:07:04 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ void	error_handling(char *line, char **env)
 			i = 0;
 			while (((t_cmd*)pipeline->content)->limiter[i])
 			{
-				printf("limiter = %s\n", ((t_cmd*)pipeline->content)->limiter[i]);
+				printf("limiter = |%s|\n", ((t_cmd*)pipeline->content)->limiter[i]);
 				i++;
 			}
 		}
@@ -121,12 +121,21 @@ void	error_handling(char *line, char **env)
 			i = 0;
 			while (((t_cmd*)pipeline->content)->red[i])
 			{
-				printf("red = %s and type = %d\n", ((t_cmd*)pipeline->content)->red[i], ((t_cmd*)pipeline->content)->type[i]);
+				printf("red = |%s| and type = |%d|\n", ((t_cmd*)pipeline->content)->red[i], ((t_cmd*)pipeline->content)->type[i]);
 				i++;
 			}
 		}
 		if (((t_cmd*)pipeline->content)->cmd)
-			printf("cmd = %s\n", ((t_cmd*)pipeline->content)->cmd);
+			printf("cmd = |%s|\n", ((t_cmd*)pipeline->content)->cmd);
+		if (((t_cmd*)pipeline->content)->arg)
+		{
+			i = 0;
+			while (((t_cmd*)pipeline->content)->arg[i])
+			{
+				printf("arg = |%s|\n", ((t_cmd*)pipeline->content)->arg[i]);
+				i++;
+			}
+		}
 		pipeline = pipeline->next;
 		printf("------------------------------------\n");
 	}

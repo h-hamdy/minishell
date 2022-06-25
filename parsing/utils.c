@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 16:40:21 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/23 22:41:20 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/25 02:21:42 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,32 +96,30 @@ int	ft_count_word(char *line, int index)
 	int count;
 
 	count = 0;
-	while (line[index] && line[index] != ' ' && line[index] != '<' && line[index] != '>')
+	if (line[index] == '"' || line[index] == '\'')
 	{
-		if (line[index] == '"' || line[index] == '\'')
+		if (line[index] == '"')
 		{
-			if (line[index] == '"')
-			{
-				index++;
-				while (line[index] && line[index] != '"')
-				{
-					count++;
-					index++;
-				}
-			}
-			else
-			{
-				index++;
-				while (line[index] && line[index] != '\'')
-				{
-					count++;
-					index++;
-				}
-			}
-			return (count);
+			index++;
+			while (line[index] && line[index] != '"')
+				(count++, index++);
 		}
-		index++;
-		count++;
+		else
+		{
+			index++;
+			while (line[index] && line[index] != '\'')
+				(count++, index++);
+		}
+		return (count);
+	}
+	else
+	{
+		while (line[index] && line[index] != ' ' && line[index] != '>' && line[index] != '<'
+			&& line[index] != '"' && line[index] != '\'')
+		{
+			index++;
+			count++;
+		}
 	}
 	return (count);
 }
