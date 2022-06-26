@@ -94,7 +94,7 @@ void	allocate_arg(char *line, t_cmd *data, int count_arg)
 			{
 				index = ignore_space(line, index);
 				count = ft_count_word(line, index);
-				data->arg[token] = (char *)malloc(sizeof(char) * count + 1);
+				data->arg[token] = (char *)malloc(sizeof(char) * (count + 1));
 				token++;
 				if (line[index] == '"' || line[index] == '\'')
 					(index++, sign = 1);
@@ -136,6 +136,8 @@ void	fill_arg(char *line, t_cmd *data)
 			}
 			else if (flag == 1)
 			{
+				// if (!(data->arg[col]))
+				// 	printf("*************dfdf************\n");??
 				index = ignore_space(line, index);
 				if (line[index] == '"' || line[index] == '\'')
 					index++;

@@ -16,13 +16,22 @@ SRCS	=	minishell.c \
 			parsing/get_tokens.c \
 			parsing/utils1.c \
 			parsing/get_full_cmd.c \
+			execution/builtins.c \
+			execution/cd.c \
+			execution/echo.c \
+			execution/env.c \
+			execution/exit.c \
+			execution/export.c \
+			execution/pwd.c \
+			execution/unset.c \
+			execution/utils.c \
 
 OBJS	=	$(SRCS:.c=.o)
 
 all:	$(NAME)
 
 $(NAME):	$(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline -L /Users/fbouanan/.brew/opt/readline/lib -lreadline -I /Users/fbouanan/.brew/opt/readline/include
 
 $(LIBFT):
 	make -C libft

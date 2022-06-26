@@ -126,7 +126,7 @@ void	error_handling(char *line, char **env)
 			}
 		}
 		if (((t_cmd*)pipeline->content)->cmd)
-			printf("cmd = |%s|\n", ((t_cmd*)pipeline->content)->cmd);
+			 printf("cmd = |%s|\n", ((t_cmd*)pipeline->content)->cmd);
 		if (((t_cmd*)pipeline->content)->arg)
 		{
 			i = 0;
@@ -136,6 +136,7 @@ void	error_handling(char *line, char **env)
 				i++;
 			}
 		}
+		builtins(pipeline, env);
 		pipeline = pipeline->next;
 		printf("------------------------------------\n");
 	}
