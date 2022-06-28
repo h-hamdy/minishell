@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 09:23:59 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/23 23:09:43 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/28 01:42:43 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ int		skip_word(char *line, int index, int flag);
 // void	exec_herdoc(char **s_line, t_node *data);
 
 
-t_list	*get_full_cmd(char **s_line);
+t_list	*get_full_cmd(char **s_line, char **env);
+char	*find_path(char *cmd, char **envp);
 
 /*********************BUILTINS****************************/
 void	builtins(t_list *pipeline, char **env);

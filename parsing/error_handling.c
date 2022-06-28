@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/25 10:07:04 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/28 01:44:58 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	error_handling(char *line, char **env)
 	if (!s_line)
 		return ;
 	handel_echo(line, env);
-	pipeline = get_full_cmd(s_line);
+	pipeline = get_full_cmd(s_line, env);
 	if (!pipeline)
 		return ;
 	int i = 0;
@@ -127,6 +127,8 @@ void	error_handling(char *line, char **env)
 		}
 		if (((t_cmd*)pipeline->content)->cmd)
 			 printf("cmd = |%s|\n", ((t_cmd*)pipeline->content)->cmd);
+		if (((t_cmd*)pipeline->content)->cmd_path)
+			 printf("cmd_path = |%s|\n", ((t_cmd*)pipeline->content)->cmd_path);
 		if (((t_cmd*)pipeline->content)->arg)
 		{
 			i = 0;
@@ -136,7 +138,7 @@ void	error_handling(char *line, char **env)
 				i++;
 			}
 		}
-		builtins(pipeline, env);
+		// builtins(pipeline, env);
 		pipeline = pipeline->next;
 		printf("------------------------------------\n");
 	}

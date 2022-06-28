@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:06:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/25 07:38:39 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/06/28 01:47:53 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ int count_args(char *line)
 	index = 0;
 	while (line[index])
 	{
-		// if (line[index] == '"' || line[index] == '\'')
-		// 	index = skip_char_inside_quote(line, index, 1);
 		index = ignore_space(line, index);
 		 if (line[index] == '<' || line[index] == '>')
 			index = skip_redirecition(line, index);
@@ -117,7 +115,7 @@ int count_args(char *line)
 			while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"' && line[index] != '\'')
 				index++;
 		}
-		else
+		else if (line[index])
 			index++;
 	}
 	return (count - 1);
@@ -172,4 +170,41 @@ int	skip_word(char *line, int index, int flag)
 	while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"')
 		index++;
 	return (index);
+}
+
+char	*find_line(char **envp)
+{
+	int i;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			return (&envp[i][5]);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*find_path(char *cmd, char **envp)
+{
+	int i;
+	char *line;
+	char *join;
+	char **paths;
+
+	i = 0;
+	if (access(cmd, X_OK) == 0)
+		return (cmd);
+	line = find_line(envp);
+	paths = ft_split(line, ':');
+	while (paths[i])
+	{
+		join = ft_strjoin(paths[i], "/");
+		if (access(ft_strjoin(join, cmd), X_OK) == 0)
+			return (ft_strjoin(join, cmd));
+		i++;
+	}
+	d_free(paths);
+	return (NULL);
 }
