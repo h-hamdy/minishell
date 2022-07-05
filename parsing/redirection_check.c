@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 14:01:33 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/22 04:47:27 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/04 17:03:31 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,15 @@ int	redirection_error(char **s_line)
 		return (0);
 	while (s_line[i])
 	{
-		j = ignore_space(s_line[i], j);
+		j = 0;
 		while (s_line[i][j])
 		{
+			j = ignore_space(s_line[i], j);
 			j = skip_char_inside_quote(s_line[i], j, 1);
 			if (!check_redirection(s_line, i, j))
 				return (0);
-			j++;
+			if (s_line[i][j])
+				j++;
 		}
 		i++;
 	}

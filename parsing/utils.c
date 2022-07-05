@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 16:40:21 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/25 02:21:42 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/04 17:01:36 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,32 +94,37 @@ char	*fo_strjoin(char *str, char c)
 int	ft_count_word(char *line, int index)
 {
 	int count;
+	char sign;
 
 	count = 0;
-	if (line[index] == '"' || line[index] == '\'')
+	sign = 0;
+	while (1)
 	{
-		if (line[index] == '"')
+		if (line[index] == '"' || line[index] == '\'')
 		{
+			sign = line[index];
 			index++;
-			while (line[index] && line[index] != '"')
+			while (line[index] && line[index] != sign)
+				(count++, index++);
+			index++;
+		}
+		if (line[index] && line[index] != '"' && line[index] != '\'' && line[index] != '<' && line[index] != '>' && line[index] != ' ')
+		{
+			while (line[index] && line[index] != '"' && line[index] != '\'' && line[index] != '<' && line[index] != '>' && line[index] != ' ')
 				(count++, index++);
 		}
-		else
-		{
-			index++;
-			while (line[index] && line[index] != '\'')
-				(count++, index++);
-		}
-		return (count);
-	}
-	else
-	{
-		while (line[index] && line[index] != ' ' && line[index] != '>' && line[index] != '<'
-			&& line[index] != '"' && line[index] != '\'')
-		{
-			index++;
-			count++;
-		}
+		if (line[index] != '"' && line[index] != '\'')
+			break ;
 	}
 	return (count);
+}
+
+int ft_isspace(char c)
+{
+	return (c == '\n' || c == ' ' || c == '\t' || c == '\r' || c == '\v' || c == '\f');
+}
+
+int is_metachar(char c)
+{
+	return (c == '<' || c == '>');
 }

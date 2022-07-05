@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 09:23:59 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/28 01:42:43 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/04 08:07:13 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ int		check_cmd(char *line, int flag);
 int		skip_redirecition(char *line, int index);
 int		count_args(char *line);
 int		skip_word(char *line, int index, int flag);
+int		ft_isspace(char c);
+int		is_metachar(char c);
 
 /********************EXC_HERDOC*************************/
 // int		get_herdoc(char **s_line, t_node *data);

@@ -6,7 +6,7 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:06:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/28 01:47:53 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/04 15:55:29 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,45 +56,7 @@ int	count_herdoc(char *line)
 	return (count);
 }
 
-int	check_cmd(char *line, int flag)
-{
-	int index;
-	int count;
-	int c_quote;
-
-	index = 0;
-	count = 0;
-	c_quote = 0;
-	while (line[index])
-	{
-		index = ignore_space(line, index);
-		if (line[index] == '<' || line[index] == '>')
-			index = skip_redirecition(line, index);
-		if (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ')
-		{
-			if (flag == 1)
-				return (index);
-			while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ')
-			{
-				if (line[index] == '"' || line[index] == '\'')
-				{
-					while (line[index] && (line[index] != '"' || line[index] != '\''))
-					{
-						count++;
-						index++;
-					}
-					return (count);
-				}
-				count++;
-				index++;
-			}
-			return (count);
-		}
-	}
-	return (count);
-}
-
-int count_args(char *line)
+int  count_args(char *line)
 {
 	int count;
 	int index;
@@ -107,18 +69,33 @@ int count_args(char *line)
 		 if (line[index] == '<' || line[index] == '>')
 			index = skip_redirecition(line, index);
 		index = ignore_space(line, index);
-		if (line[index] && (line[index] != '<' || line[index] != '>'))
+		if (line[index] && line[index] != '<' && line[index] != '>')
 		{
 			if (line[index] == '"' || line[index] == '\'')
-				index++;
-			count++;
-			while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"' && line[index] != '\'')
-				index++;
+			{
+				while (1)
+				{
+					if (line[index] && (line[index] == '"' || line[index] == '\''))
+						index = skip_word(line, index, 1) + 1;
+					if (line[index] && line[index] != '"' && line[index] != '\'' && !is_metachar(line[index]) && line[index] != ' ')
+						index = skip_word(line, index, 0);
+					else
+						break ;
+				}
+				count++;
+			}
+			else
+			{
+				while (line[index] && !is_metachar(line[index]) && line[index] != ' ' && line[index] != '"' && line[index] != '\'')
+					index++;
+				if (line[index] != '"' && line[index] != '\'')
+					count++;
+			}
 		}
-		else if (line[index])
+		else if (line[index] && !is_metachar(line[index]))
 			index++;
 	}
-	return (count - 1);
+	return (count);
 }
 
 int	  skip_redirecition(char *line, int index)
@@ -127,44 +104,29 @@ int	  skip_redirecition(char *line, int index)
 	if (line[index] == '<' || line[index] == '>')
 		index++;
 	index = ignore_space(line, index);
-	if (line[index] == '"' || line[index] == '\'')
+	while (1)
 	{
-		if (line[index] == '"')
-		{
-			index++;
-			while (line[index] && line[index] != '"')
-				index++;
-			return (index + 1);
-		}
-		else
-		{
-			index++;
-			while (line[index] && line[index] != '\'')
-				index++;
-			return (index + 1);
-		}
+		if (line[index] && (line[index] == '"' || line[index] == '\''))
+			index = skip_word(line, index, 1) + 1;
+		if (line[index] && line[index] != '"' && line[index] != '\'' && line[index] != '<' && line[index] != '>' && line[index] != ' ')
+			index = skip_word(line, index, 0);
+		if (line[index] != '"' && line[index] != '\'')
+			break ;
 	}
-	while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"' && line[index] != '\'')
-		index++;
 	return (index);
 }
 
 int	skip_word(char *line, int index, int flag)
 {
+	char sign;
+
+	sign = 0;
 	if (flag == 1)
 	{
-		if (line[index] == '"')
-		{
+		sign = line[index];
+		index++;
+		while (line[index] && line[index] != sign)
 			index++;
-			while (line[index] && line[index] != '"')
-				index++;
-		}
-		else
-		{
-			index++;
-			while (line[index] && line[index] != '\'')
-				index++;
-		}
 		return (index);
 	}
 	while (line[index] && line[index] != '<' && line[index] != '>' && line[index] != ' ' && line[index] != '"')
@@ -197,6 +159,8 @@ char	*find_path(char *cmd, char **envp)
 	if (access(cmd, X_OK) == 0)
 		return (cmd);
 	line = find_line(envp);
+	if (!line)
+		return (NULL);
 	paths = ft_split(line, ':');
 	while (paths[i])
 	{

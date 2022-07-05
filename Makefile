@@ -31,19 +31,19 @@ OBJS	=	$(SRCS:.c=.o)
 all:	$(NAME)
 
 $(NAME):	$(LIBFT) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline -L /Users/fbouanan/.brew/opt/readline/lib -lreadline -I /Users/fbouanan/.brew/opt/readline/include
+	@	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline -L /Users/fbouanan/.brew/opt/readline/lib -lreadline -I /Users/fbouanan/.brew/opt/readline/include
 
 $(LIBFT):
 	make -C libft
 	make bonus -C libft
 
 clean:
-	make clean -C libft
-	rm -rf $(OBJS)
+	@make clean -C libft
+	@rm -rf $(OBJS)
 
 fclean:	clean
-	rm -rf libft/libft.a
-	rm -rf $(NAME)
+	@rm -rf libft/libft.a
+	@rm -rf $(NAME)
 
 re: fclean all
 
