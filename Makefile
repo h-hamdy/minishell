@@ -1,4 +1,4 @@
-CC		=	gcc
+xCC		=	gcc
 
 CFLAGS	=	-Wall -Wextra -Werror -g -fsanitize=address
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jesse <jesse@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 10:11:49 by hhamdy            #+#    #+#             */
-/*   Updated: 2021/11/18 13:18:38 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/08 17:38:50 by jesse            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,11 @@ static char	**ft_fill_str(char **str, char const *s, char c)
 
 char	**ft_split(char const *s, char c)
 {
-	int		i;
 	int		count;
 	char	**str;
 
 	if (!s)
 		return (0);
-	i = 0;
 	count = ft_count_word(s, c);
 	str = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!str)

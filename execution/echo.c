@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fbouanan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 15:51:48 by fbouanan          #+#    #+#             */
-/*   Updated: 2022/06/04 15:51:50 by fbouanan         ###   ########.fr       */
+/*   Updated: 2022/07/08 18:37:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ void	ft_echo(t_list *pipeline, char **env)
 {
 	int	i;
 	// int	j;
-	int	k;
 	// int	flag;
-	env = NULL;
+	(void)env;
 
 	i = 1;
-	k = 0;
 	// printf("****here\n");
 
 	while (((t_cmd*)pipeline->content)->arg[i])

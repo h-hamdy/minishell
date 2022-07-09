@@ -5,9 +5,7 @@
 
 void	init_data(t_exec *exec)
 {
-	int i;
-
-	i = 0;
+	(void)exec;
 	exec = NULL;
 	// exec->cmd = cmd;
 	// g_v.envp;
@@ -62,9 +60,6 @@ void	ft_putstr(char *s)
 
 void	ft_putendl(char *s)
 {
-	int	i;
-
-	i = 0;
 	if (s)
 		ft_putstr(s);
 	write (1, "\n", 1);

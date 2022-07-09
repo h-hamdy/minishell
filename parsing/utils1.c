@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 11:06:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/07/04 15:55:29 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/09 10:07:06 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,12 @@ int	count_redirection(char *line)
 		if (line[i] == '<' && line[i + 1] == '<')
 			i += 2;
 		if (line[i] == '>' && line[i + 1] == '>')
-		{
-			count++;
-			i += 2;
-		}
+			(i += 2, count++);
 		if ((line[i] == '>' && line[i + 1] != '>')
 			|| (line[i] == '<' && line[i + 1] != '<'))
 			count++;
-		i++;
+		if (line[i])
+			i++;
 	}
 	return (count);
 }

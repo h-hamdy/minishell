@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/21 11:05:42 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/28 01:44:58 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/08 18:35:35 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	error_handling(char *line, char **env)
 	s_line = redirections(line);
 	if (!s_line)
 		return ;
-	handel_echo(line, env);
+	// handel_echo(line, env);
 	pipeline = get_full_cmd(s_line, env);
 	if (!pipeline)
 		return ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dollar_handling.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 13:06:32 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/02 13:06:35 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/07/08 18:35:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,32 +34,32 @@ char	*count_word(char *line)
 	return (holder);
 }
 
-void    handel_echo(char *line, char **env)
-{
-	int		i;
-	int		j;
-	char	*holder;
-	char	*value;
+// void    handel_echo(char *line, char **env)
+// {
+// 	int		i;
+// 	int		j;
+// 	char	*holder;
+// 	char	*value;
 
-	i = 0;
-	j = 0;
-	holder = count_word(line);
-	while (line[i])
-	{
-		if (line[i] == '$')
-		{
-			i++;
-			while (line[i] && line[i] != ' ')
-				holder[j++] = line[i++];
-		}
-		i++;
-	}
-	holder[j + 1] = '\0';
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp(holder, env[i], ft_strlen(holder)))
-			value = ft_strchr(env[i], '=') + 1;
-		i++;
-	}
-}
+// 	i = 0;
+// 	j = 0;
+// 	holder = count_word(line);
+// 	while (line[i])
+// 	{
+// 		if (line[i] == '$')
+// 		{
+// 			i++;
+// 			while (line[i] && line[i] != ' ')
+// 				holder[j++] = line[i++];
+// 		}
+// 		i++;
+// 	}
+// 	holder[j + 1] = '\0';
+// 	i = 0;
+// 	while (env[i])
+// 	{
+// 		if (!ft_strncmp(holder, env[i], ft_strlen(holder)))
+// 			value = ft_strchr(env[i], '=') + 1;
+// 		i++;
+// 	}
+// }
