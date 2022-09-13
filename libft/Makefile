@@ -1,8 +1,8 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 
-AR = ar rs
+AR = ar rsc
 
 NAME = libft.a
 
@@ -58,16 +58,16 @@ OBJS_BONUS = $(BONUS_F:.c=.o)
 all:	$(NAME)
 
 $(NAME):	$(OBJS)
-	$(AR) $(NAME) $(OBJS)
+	@ $(AR) $(NAME) $(OBJS)
 
 bonus:		$(OBJS_BONUS)
-	$(AR) $(NAME) $(OBJS_BONUS)
+	@ $(AR) $(NAME) $(OBJS_BONUS)
 
 clean:
-	rm -f $(OBJS) $(OBJS_BONUS)
+	@ rm -f $(OBJS) $(OBJS_BONUS)
 
 fclean:	clean
-	rm -f $(NAME)
+	@ rm -f $(NAME)
 
 re: fclean all
 

@@ -1,130 +1,103 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/29 16:40:21 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/07/04 17:01:36 by hhamdy           ###   ########.fr       */
+/*   Created: 2022/06/02 11:06:56 by hhamdy            #+#    #+#             */
+/*   Updated: 2022/09/01 06:30:39 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	error_msg(char *msg)
+int	skip_redirecition(char *line, int index)
 {
-	char	*str;
-
-	str = ft_strjoin("Minishell: syntax error near unexpected token ", msg);
-	write(2, str, ft_strlen(str));
-	write(2, "\n", 1);
-	free(str);
-}
-
-int	ignore_space(char *line, int i)
-{
-	while (line[i] && line[i] == ' ')
-		i++;
-	return (i);
-}
-
-int	trow_err(int d_quote, int s_quote)
-{
-	if (d_quote % 2 != 0 || s_quote % 2 != 0)
-	{
-		write(2, "Minishell: double quotes error\n", 32);
-		return (0);
-	}
-	return (1);
-}
-
-char	**ft_free(char **str, int k)
-{
-	while (k >= 0)
-	{
-		free(str[k]);
-		k--;
-	}
-	return (str);
-}
-
-void	d_free(char **str)
-{
-	int i;
-
-	i = 0;
-	if (!str)
-		return ;
-	while (str[i])
-	{
-		free(str[i]);
-		str[i] = 0;
-		i++;
-	}
-	free(str);
-	str = NULL;
-}
-
-char	*fo_strjoin(char *str, char c)
-{
-	char	*r;
-	int		i;
-
-	i = 0;
-	if (!str)
-		return (NULL);
-	while (str[i])
-		i++;
-	r = malloc(sizeof(char) * i + 2);
-	if (!r)
-		return (NULL);
-	i = 0;
-	while (str[i])
-	{
-		r[i] = str[i];
-		i++;
-	}
-	r[i] = c;
-	r[i + 1] = '\0';
-	free(str);
-	return (r);
-}
-
-int	ft_count_word(char *line, int index)
-{
-	int count;
-	char sign;
-
-	count = 0;
-	sign = 0;
+	index++;
+	if (line[index] == '<' || line[index] == '>')
+		index++;
+	index = ignore_space(line, index);
 	while (1)
 	{
-		if (line[index] == '"' || line[index] == '\'')
-		{
-			sign = line[index];
-			index++;
-			while (line[index] && line[index] != sign)
-				(count++, index++);
-			index++;
-		}
-		if (line[index] && line[index] != '"' && line[index] != '\'' && line[index] != '<' && line[index] != '>' && line[index] != ' ')
-		{
-			while (line[index] && line[index] != '"' && line[index] != '\'' && line[index] != '<' && line[index] != '>' && line[index] != ' ')
-				(count++, index++);
-		}
+		if (line[index] && is_quote(line[index]))
+			index = skip_word(line, index, 1);
+		if (line[index] && !is_quote(line[index]) && !is_metachar(line[index])
+			&& !ft_isspace(line[index]))
+			index = skip_word(line, index, 0);
 		if (line[index] != '"' && line[index] != '\'')
 			break ;
 	}
-	return (count);
+	return (index);
 }
 
-int ft_isspace(char c)
+int	skip_word(char *line, int index, int flag)
 {
-	return (c == '\n' || c == ' ' || c == '\t' || c == '\r' || c == '\v' || c == '\f');
+	char	sign;
+
+	sign = 0;
+	if (flag == 1)
+	{
+		sign = line[index];
+		index++;
+		while (line[index] && line[index] != sign)
+			index++;
+		return (index);
+	}
+	while (line[index] && !is_metachar(line[index]) && !ft_isspace(line[index])
+		&& !is_quote(line[index]))
+		index++;
+	return (index);
 }
 
-int is_metachar(char c)
+char	*return_line(char **paths, char *cmd, char *join, char *tmp)
 {
-	return (c == '<' || c == '>');
+	char	*line;
+
+	line = ft_strjoin(join, cmd);
+	if (join)
+		free(join);
+	(d_free(paths), free(tmp));
+	return (line);
+}
+
+char	*return_path(char **envp)
+{
+	int	i;
+
+	i = 0;
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
+			return (&envp[i][5]);
+		i++;
+	}
+	return (NULL);
+}
+
+char	*find_path(char *cmd, char **envp)
+{
+	int		i;
+	char	*line;
+	char	*join;
+	char	**paths;
+	char	*tmp;
+
+	i = -1;
+	if (access(cmd, F_OK) == 0)
+		return (ft_strdup(cmd));
+	line = return_path(envp);
+	if (!line)
+		return (NULL);
+	paths = ft_split(line, ':');
+	while (paths[++i])
+	{
+		join = ft_strjoin(paths[i], "/");
+		tmp = ft_strjoin(join, cmd);
+		if (access(tmp, X_OK) == 0)
+			return (return_line(paths, cmd, join, tmp));
+		(free(tmp), free(join));
+	}
+	d_free(paths);
+	return (NULL);
 }

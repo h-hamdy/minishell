@@ -34,76 +34,70 @@ char	**sorted_exp(char **table)
 		}
 		i++;
 	}
-	i = 0;
 	return (table);
+}
+
+int	get_eq_s(char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '=')
+			return (i);
+		i++;
+	}
+	return (0);
 }
 
 void	only_export(char **env)
 {
 	int		i;
 	char	**sor_exp;
+	char	**value_h;
 
 	i = 0;
 	sor_exp = sorted_exp(env);
 	while (sor_exp[i])
-		printf("declare -x %s\n", sor_exp[i++]);
+		i++;
+	value_h = malloc(sizeof(char *) * (i + 1));
+	if (!value_h)
+		return ;
+	i = 0;
+	while (sor_exp[i])
+	{
+		value_h[i] = ft_strchr(sor_exp[i], '=') + 1;
+		i++;
+	}
+	value_h[i] = NULL;
+	write_expo(sor_exp, value_h);
+	free(value_h);
 	return ;
+}
+
+void	free_old_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		i++;
+	}
 }
 
 void	ft_export(t_list *pipeline, t_exec *exec)
 {
-	int	i;
-	int	j;
+	char	**arg;
 
-	i = 0;
-	// j = 0;
-	printf("here\n");
-	//printf("*****|%s|\n", ((t_cmd*)pipeline->content)->arg[0]);
-	if (!((t_cmd*)pipeline->content)->arg[i])
+	arg = ((t_cmd *)pipeline->content)->arg;
+	if (!arg[1])
 	{
 		only_export(g_v.envp);
+		g_v.exit_code = 0;
 		return ;
 	}
-	while (((t_cmd*)pipeline->content)->arg[i])
-	{
-		if (!ft_isalpha(((t_cmd*)pipeline->content)->arg[i][0]))
-		{
-			printf("export: `%s': not a valid identifier\n", ((t_cmd*)pipeline->content)->arg[i]);
-			return ;
-		}
-		j = 0;
-		while (((t_cmd*)pipeline->content)->arg[i][j])
-		{
-			if (!ft_isalpha(((t_cmd*)pipeline->content)->arg[i][0]) || ((t_cmd*)pipeline->content)->arg[i][0] == '=')
-			{
-				printf("=====export: `%s': not a valid identifier\n", ((t_cmd*)pipeline->content)->arg[i]);
-				return ;
-			}
-			// else if (!ft_isalnum(((t_cmd*)pipeline->content)->arg[i][j]))
-			// 	((t_cmd*)pipeline->content)->arg[i][j] = 127;
-			j++;
-		}
-		i++;
-	}
-	i = 0;
-	while (g_v.envp[i])
-		i++;
-	exec->hold = malloc(sizeof(char *) * (i + 2));
-	i = 0;
-	while (g_v.envp[i])
-	{
-		exec->hold[i] = g_v.envp[i];
-		i++;
-	}
-			//printf("---->|%s|\n", ((t_cmd*)pipeline->content)->arg[0]);
-  // return ;
-	exec->hold[i] = ((t_cmd*)pipeline->content)->arg[0];
-	exec->hold[i + 1] = NULL;
-	//free envp l9dima wahda wahda
-	g_v.envp = exec->hold;
-	i = 0;
-	while (g_v.envp[i])
-	{
-		printf("%s\n", g_v.envp[i++]);
-	}
+	add_export(arg, pipeline, exec);
 }

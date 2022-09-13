@@ -12,86 +12,86 @@
 
 #include "../minishell.h"
 
-char    *get_key(char *s)
+char	*get_key(char *s)
 {
-	char	*hold;
 	int		i;
 
 	i = 0;
-	while (s[i])
+	while (s[i] && s[i] != '=')
 		i++;
-	hold = malloc(sizeof(char) * i + 1);
+	g_v.hold = malloc(sizeof(char) * i + 1);
 	i = 0;
 	while (s[i] && s[i] != '=')
 	{
-		hold[i] = s[i];
+		g_v.hold[i] = s[i];
 		i++;
 	}
-	hold[i + 1] = '\0';
-	return (hold);
+	g_v.hold[i] = '\0';
+	return (g_v.hold);
 }
 
 int	check_var(char *av)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!ft_strcmp(av, "''") || !ft_strcmp(av, """"))
 		return (1);
 	while (av[i])
 	{
-		if (!ft_isalpha(av[0]) || !ft_isalnum(av[i]) || av[i] == '$' || av[i] == '?')
+		if (!ft_isalpha(av[0]) || !ft_isalnum(av[i])
+			|| av[i] == '$' || av[i] == '?')
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-void    ft_unset(t_list *pipeline)
+int	check_unset(char *arg)
 {
-	int 	i;
-	int 	k;
+	int		i;
+	char	*hold;
+
+	i = 0;
+	while (g_v.envp[i])
+	{
+		hold = get_key(g_v.envp[i]);
+		if (!ft_strcmp(hold, arg))
+		{
+			free(hold);
+			return (0);
+		}
+		free(hold);
+		i++;
+	}
+	return (1);
+}
+
+void	ft_unset(t_list *pipeline)
+{
+	int		i;
+	int		k;
 	char	**tmp;
 
 	i = 0;
-	k = 0;
-	if (!((t_cmd*)pipeline->content)->arg[k])
+	k = 1;
+	if (!((t_cmd *)pipeline->content)->arg[0])
+	{
+		g_v.exit_code = 0;
 		return ;
+	}
 	while (g_v.envp[i])
 		i++;
 	tmp = malloc(sizeof(char *) * (i + 1));
-	i = 0;
-	while (g_v.envp[i])
-	{
+	i = -1;
+	while (g_v.envp[++i])
 		tmp[i] = g_v.envp[i];
-		i++;
-	}
-	while (((t_cmd*)pipeline->content)->arg[k])
+	while (((t_cmd *)pipeline->content)->arg[k])
 	{
-		i = 0;
-		if (check_var(((t_cmd*)pipeline->content)->arg[k]))
-		{
-			printf("unset: `%s': not a valid identifier\n", ((t_cmd*)pipeline->content)->arg[k]);
-			return ;
-		}
-		while (tmp[i])
-		{
-			if (!ft_strcmp(((t_cmd*)pipeline->content)->arg[k], get_key(tmp[i])))
-			{
-				tmp[i][0] = '\0';
-				break ;
-			}
-			i++;
-		}
+		ft_unset_tool(pipeline, tmp, k);
 		k++;
 	}
-	i = 0;
-	while (tmp[i])
-	{
-		if (tmp[i][0] != '\0')
-			printf("%s\n", tmp[i++]);
-		else	
-			i++;
-	}
+	tmp[i] = NULL;
+	free(g_v.envp);
+	g_v.envp = tmp;
 }
-

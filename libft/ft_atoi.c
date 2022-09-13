@@ -14,10 +14,10 @@
 
 #define L_MAX 9223372036854775807
 
-int	ft_atoi(const char *str)
+unsigned long long	ft_atoi(const char *str)
 {
 	size_t				i;
-	unsigned long		n;
+	unsigned long long	n;
 	int					mult;
 
 	i = 0;
@@ -32,11 +32,9 @@ int	ft_atoi(const char *str)
 	}
 	while (str[i] >= '0' && str[i] <= '9')
 	{
-		if (mult == 1 && n > (unsigned long)L_MAX)
-			return (-1);
-		else if (mult == -1 && n > (unsigned long)L_MAX + 1)
-			return (0);
 		n = n * 10 + (str[i++] - '0');
+		if (n > 9223372036854775807)
+			return (1);
 	}
-	return (mult * (int )n);
+	return (mult * n);
 }

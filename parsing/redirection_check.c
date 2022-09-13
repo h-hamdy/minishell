@@ -6,17 +6,21 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 14:01:33 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/07/04 17:03:31 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/09/06 22:43:26 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	raise_err(char err)
+int	check_red_type(char *line, int index)
 {
-	write (2, "Minishell: syntax error near unexpected token ", 46);
-	write (2, &err, 1);
-	write (2, "\n", 1);
+	if (line[index] == '>' && line[index + 1] == '>')
+		return (3);
+	if (line[index] == '<' && line[index + 1] == '<')
+		return (4);
+	if (line[index] == '<')
+		return (1);
+	return (2);
 }
 
 // this function check the last character of the line
@@ -82,7 +86,7 @@ int	redirection_error(char **s_line)
 	int	j;
 
 	i = 0;
-	if (!last_char(s_line, i)) 
+	if (!last_char(s_line, i))
 		return (0);
 	while (s_line[i])
 	{

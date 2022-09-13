@@ -12,17 +12,29 @@
 
 #include "../minishell.h"
 
-void	ft_env()
+void	ft_env(t_list *pipeline)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (g_v.envp[i])
+	if (!((t_cmd *)pipeline->content)->arg[1])
 	{
-		if (g_v.envp[i][0] == '\0')
+		while (g_v.envp[i])
+		{
+			if (g_v.envp[i][0] && get_eq_s(g_v.envp[i]))
+			{
+				ft_putstr_fd(g_v.envp[i], 1);
+				ft_putstr_fd("\n", 1);
+			}
 			i++;
-		printf("---%s\n",g_v.envp[i]);
-		i++;
+		}
+		g_v.exit_code = 0;
 	}
-	printf("yyyyyy\n");
+	else
+	{
+		g_v.exit_code = 127;
+		ft_putstr_fd("env: ", 2);
+		ft_putstr_fd(((t_cmd *)pipeline->content)->arg[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
 }

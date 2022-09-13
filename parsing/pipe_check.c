@@ -6,30 +6,29 @@
 /*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/22 17:09:56 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/06/04 10:36:46 by hhamdy           ###   ########.fr       */
+/*   Updated: 2022/09/01 06:49:06 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*skip_space(char *s)
+char	**replace_pipe(char **s_line)
 {
-	int		i;
-	int		j;
-	char	*s_line;
+	int	index;
+	int	row;
 
-	i = 0;
-	j = 0;
-	s_line = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
-	if (!s_line)
-		return (NULL);
-	while (s[i])
+	index = 0;
+	while (s_line[index])
 	{
-		if (s[i] != ' ')
-			s_line[j++] = s[i];
-		i++;
+		row = 0;
+		while (s_line[index][row])
+		{
+			if (s_line[index][row] == -1)
+				s_line[index][row] = '|';
+			row++;
+		}
+		index++;
 	}
-	s_line[j] = '\0';
 	return (s_line);
 }
 
@@ -75,9 +74,7 @@ int	skip_char_inside_quote(char *line, int i, int flag)
 int	check_pipe_error(char *line)
 {
 	int	i;
-	int	count;
 
-	count = 0;
 	i = 0;
 	while (line[i])
 	{
@@ -85,16 +82,20 @@ int	check_pipe_error(char *line)
 			i = skip_char_inside_quote(line, i, 0);
 		if (line[i] == '|')
 		{
+			if (line[i + 1] == '|')
+			{
+				error_msg("`|'");
+				return (0);
+			}
 			i = ignore_space(line, i + 1);
 			if (line[i] == '|')
 			{
-				error_msg("`||'");
+				error_msg("`|'");
 				return (0);
 			}
-			if (line[i + 1] != '|')
-				count++;
 		}
-		i++;
+		else
+			i++;
 	}
 	return (1);
 }

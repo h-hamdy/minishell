@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jesse <jesse@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hhamdy <hhamdy@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 10:11:49 by hhamdy            #+#    #+#             */
-/*   Updated: 2022/07/08 17:38:50 by jesse            ###   ########.fr       */
+/*   Updated: 2022/08/22 11:14:30 by hhamdy           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,6 @@ static int	ft_count_word(char const *s, char c)
 	return (count);
 }
 
-static char	**ft_free(char **str, int k)
-{
-	while (k >= 0)
-	{
-		free(str[k]);
-		k--;
-	}
-	return (str);
-}
-
 static char	**ft_get_word(char **str, char const *s, char c)
 {
 	int	i;
@@ -58,8 +48,6 @@ static char	**ft_get_word(char **str, char const *s, char c)
 		while (s[i] != c && s[i] && s[i++])
 			len_word++;
 		str[k] = (char *)malloc(sizeof (char) * (len_word + 1));
-		if (!str[k])
-			return (ft_free(str, k - 1));
 		k++;
 		len_word = 0;
 	}
@@ -96,11 +84,13 @@ static char	**ft_fill_str(char **str, char const *s, char c)
 
 char	**ft_split(char const *s, char c)
 {
+	int		i;
 	int		count;
 	char	**str;
 
 	if (!s)
 		return (0);
+	i = 0;
 	count = ft_count_word(s, c);
 	str = (char **)malloc(sizeof(char *) * (count + 1));
 	if (!str)
